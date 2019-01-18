@@ -48,8 +48,8 @@ class App extends Component {
 
   getSquareMeterPrice = ({ price, size }) => {
     const radius = size / 2;
-    const area = (radius * radius * 3.1415) / 1000;
-    return price / area;
+    const area = (radius * radius * 3.1415);
+    return price * (10000 / area);
   }
 
   render() {
