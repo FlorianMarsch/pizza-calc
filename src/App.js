@@ -25,11 +25,26 @@ const styles = theme => ({
   },
 });
 
+const defaultState = [];
+
+const getPersistedState = () => {
+  const persisted = localStorage.getItem("pizza-calc.pizzas");
+  if (persisted) {
+    return JSON.parse(persisted);
+  } else {
+    return defaultState;
+  }
+}
+
+const setPersistedState = (pizzas) => {
+  localStorage.setItem("pizza-calc.pizzas", JSON.stringify(pizzas));
+}
+
 class App extends Component {
 
   state = {
     dialogOpen: false,
-    pizzas: [],
+    pizzas: getPersistedState(),
   }
 
   handleDialogOpen = () => {
@@ -43,13 +58,15 @@ class App extends Component {
     this.state.pizzas.push({
       ...pizza, cm2price: this.getSquareMeterPrice({ ...pizza })
     });
+    setPersistedState(this.state.pizzas);
+
     this.setState({ dialogOpen: false, pizzas: this.state.pizzas });
   };
 
   getSquareMeterPrice = ({ price, size }) => {
-    const radius = size / 2;
+    const radius = size / 200;
     const area = (radius * radius * 3.1415);
-    return price * (10000 / area);
+    return price * (1 / area);
   }
 
   render() {
